@@ -838,7 +838,11 @@ def render_streamlit_ui(opyrator: Opyrator) -> None:
     if opyrator.description:
         st.markdown(opyrator.description)
 
+    if opyrator._pre_commands:
+        opyrator._pre_commands()
     InputUI(session_state=session_state, input_class=opyrator.input_type).render_ui()
+    if opyrator._post_commands:
+        opyrator._post_commands()
 
     st.markdown("---")
 

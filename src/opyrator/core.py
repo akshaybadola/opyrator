@@ -1,7 +1,7 @@
 import importlib
 import inspect
 import re
-from typing import Any, Callable, Type, Union, get_type_hints
+from typing import Any, Callable, Type, Union, get_type_hints, Optional
 
 from pydantic import BaseModel, parse_raw_as
 from pydantic.tools import parse_obj_as
@@ -109,7 +109,13 @@ class Opyrator:
         if isinstance(func, str):
             # Try to load the function from a string notion
             self.function = get_callable(func)
+            self._pre_commands: Optional[Callable] =\
+                get_callable(func.split(":")[0] + ":pre_commands")
+            self._post_commands: Optional[Callable] =\
+                get_callable(func.split(":")[0] + ":post_commands")
         else:
+            self._pre_commands = None
+            self._post_commands = None
             self.function = func
 
         self._name = "Opyrator"
